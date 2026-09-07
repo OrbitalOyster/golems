@@ -4,9 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://b1gupfl7y6edd" path="res://Piney.tscn" id="2_2dftf"]
 [ext_resource type="Script" uid="uid://btfjloynxnhv" path="res://fps.gd" id="2_bcbcq"]
 [ext_resource type="PackedScene" uid="uid://ct8p5qb782cnm" path="res://Player.tscn" id="4_js7pq"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_javbf"]
-size = Vector3(6, 1, 6)
+[ext_resource type="Script" uid="uid://xnncw0fyktrq" path="res://sun.gd" id="4_wygdx"]
+[ext_resource type="Script" uid="uid://cp7bffw3n8vi2" path="res://player.gd" id="5_eu7l1"]
+[ext_resource type="PackedScene" uid="uid://buiycpdfujkwg" path="res://Ground.tscn" id="7_wygdx"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_jt8pb"]
 panorama = ExtResource("1_c6gwx")
@@ -28,16 +28,12 @@ shadow_offset = Vector2(2, 2)
 
 [node name="World" type="Node3D" unique_id=194965324]
 
-[node name="Floor" type="MeshInstance3D" parent="." unique_id=1973425206]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-mesh = SubResource("BoxMesh_javbf")
-
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1600373478]
 environment = SubResource("Environment_gv5m4")
 camera_attributes = SubResource("CameraAttributesPractical_gv5m4")
 
 [node name="Camera" type="Camera3D" parent="." unique_id=537346684]
-transform = Transform3D(1, 0, 0, 0, 0.95182765, 0.30663353, 0, -0.30663353, 0.95182765, -1.0271022, 2.1735327, 2.5388744)
+transform = Transform3D(1, 0, 0, 0, 0.95182765, 0.30663353, 0, -0.30663353, 0.95182765, -1.0271022, 1.1735327, 3.5388744)
 
 [node name="FPS" type="Label" parent="Camera" unique_id=930018338]
 offset_left = 15.0
@@ -48,12 +44,20 @@ text = "FPS:"
 label_settings = SubResource("LabelSettings_2dftf")
 script = ExtResource("2_bcbcq")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=27065011]
-transform = Transform3D(0.7071068, -0.5, 0.5, 0, 0.7071068, 0.70710677, -0.7071068, -0.5, 0.5, 3, 3, 3)
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=27065011]
+transform = Transform3D(0.70710677, -0.49999997, 0.49999997, 0, 0.70710677, 0.70710677, -0.70710677, -0.49999997, 0.49999997, 3, 3, 3)
 shadow_enabled = true
+script = ExtResource("4_wygdx")
 
 [node name="Piney" parent="." unique_id=1736328076 instance=ExtResource("2_2dftf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3729423, -0.11206132, -0.85691845)
+collision_layer = 2
+collision_mask = 0
 
 [node name="Player" parent="." unique_id=1755340232 instance=ExtResource("4_js7pq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2365401, 0.866222, -0.45089197)
+transform = Transform3D(-0.8160579, 0, -0.57797015, 0, 1, 0, 0.57797015, 0, -0.8160579, -0.8365401, 1.099803, 0.64910805)
+collision_mask = 2
+script = ExtResource("5_eu7l1")
+
+[node name="Ground" parent="." unique_id=650650679 instance=ExtResource("7_wygdx")]
+transform = Transform3D(4, 0, 0, 0, 0.25, 0, 0, 0, 4, 0, 0, 0)

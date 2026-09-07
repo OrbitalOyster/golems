@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://buiycpdfujkwg"]
+
+[ext_resource type="Material" uid="uid://ckbgrxgnos6xk" path="res://GroundMaterial.tres" id="1_dfy80"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_javbf"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_javbf"]
+
+[node name="Ground" type="StaticBody3D" unique_id=650650679]
+collision_layer = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1308142199]
+shape = SubResource("BoxShape3D_javbf")
+metadata/_edit_group_ = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=922273508]
+material_override = ExtResource("1_dfy80")
+mesh = SubResource("BoxMesh_javbf")
+metadata/_edit_group_ = true
