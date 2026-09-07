@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://b1gupfl7y6edd"]
+
+[ext_resource type="PackedScene" uid="uid://rhb6k2tp487n" path="res://models/piney/piney.gltf" id="1_qkqye"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_javbf"]
+height = 1.8
+
+[node name="Piney" type="StaticBody3D" unique_id=1736328076]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1748043997]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("CapsuleShape3D_javbf")
+
+[node name="gltf" parent="." unique_id=1938881811 instance=ExtResource("1_qkqye")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.28318328, 0)
