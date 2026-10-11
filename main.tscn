@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://vh6oj70u5m7n"]
+
+[ext_resource type="Script" uid="uid://dqj24t0vy7y47" path="res://main.gd" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://cbd8cbqkpscoh" path="res://main_camera.gd" id="2_0xm2m"]
+
+[sub_resource type="Environment" id="Environment_javbf"]
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+
+[node name="Main" type="Node3D" unique_id=146398355]
+script = ExtResource("1_ig7tw")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=714263361]
+environment = SubResource("Environment_javbf")
+
+[node name="MainCamera" type="Camera3D" parent="." unique_id=252049340]
+transform = Transform3D(1, 0, 0, 0, 0.7071067, 0.7071067, 0, -0.7071067, 0.7071067, 0, 4, 5)
+fov = 60.0
+script = ExtResource("2_0xm2m")
+
+[node name="FPS" type="Label" parent="MainCamera" unique_id=1200668945]
+offset_right = 129.0
+offset_bottom = 76.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 32
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1566712290]
+transform = Transform3D(0.70710677, -0.49999997, 0.49999997, 0, 0.70710677, 0.70710677, -0.70710677, -0.49999997, 0.49999997, 10, 10, 10)
+shadow_enabled = true
