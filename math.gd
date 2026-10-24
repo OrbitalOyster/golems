@@ -136,3 +136,19 @@ static func get_neighbour_coords(q: int, r: int, s: int, radius: int, d: int) ->
 	# Should not get here
 	printerr("Oh no!")
 	return Vector3i(0, 0, 0)
+#
+#static func get_neighbour_chunk(q: int, r: int, s: int, d: int) -> Vector3i:
+	#match d:
+		#0:
+		#1:
+		#2:
+		#3:
+		#4:
+		#5:
+	#
+	## Should not get here
+	#printerr("Oh no!")
+	#return Vector3i(0, 0, 0)
+
+static func is_rim_hex(q: int, r: int, s: int) -> bool:
+	return abs(q) == Utils.CHUNK_RADIUS - 1 or abs(r) == Utils.CHUNK_RADIUS - 1 or abs(s) == Utils.CHUNK_RADIUS - 1

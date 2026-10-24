@@ -21,7 +21,15 @@ func generate_hex_data():
 	hex_data.resize(size)
 	hexes.resize(size)
 	for i in size:
-		hex_data[i] = HexData.new(Color.from_hsv(randf(), .9, .9))
+		var cubic = Math.linear_to_cubic(i)
+		var c: Color
+		if Math.is_rim_hex(cubic.x, cubic.y, cubic.z):
+			c = Color.from_hsv(randf(), .9, .2)
+			print("Ok")
+		else:
+			c = Color.from_hsv(randf(), .9, .9)
+		hex_data[i] = HexData.new(c)
+		
 	hex_data[0].set_color(Color.BLACK)
 
 func generate_hex(x: float, z: float, size: float, flat_top: bool) -> Hex:
