@@ -9,7 +9,7 @@ func generate_world(radius: int):
 	chunks.resize(world_size)
 	print("World size: ", world_size * Math.get_number_of_hexes(Utils.CHUNK_RADIUS))
 	
-	var first_chunk = Chunk.new(0, 0, 0, 0, Utils.CHUNK_RADIUS)
+	var first_chunk = Chunk.new(0, 0, 0, 0)
 	chunks[0] = first_chunk
 	add_child(first_chunk)
 	
@@ -24,9 +24,13 @@ func generate_world(radius: int):
 				var neighbour_number = Math.cubic_to_linear(nc.x, nc.y, nc.z)
 				if chunks[neighbour_number] == null:
 					var pos = Math.get_neighbour_coords(
-						chunks[j].q, chunks[j].r, chunks[j].s, Utils.CHUNK_RADIUS, d
+						chunks[j].center_q,
+						chunks[j].center_r,
+						chunks[j].center_s,
+						Utils.CHUNK_RADIUS,
+						d
 					)
-					var new_chunk = Chunk.new(neighbour_number, pos.x, pos.y, pos.z, Utils.CHUNK_RADIUS)
+					var new_chunk = Chunk.new(neighbour_number, pos.x, pos.y, pos.z)
 					chunks[neighbour_number] = new_chunk
 					add_child(new_chunk)
 
@@ -61,6 +65,7 @@ func _input(event):
 		)
 		var cubic = Math.cartesian_to_cubic(position3D.x, position3D.z)
 		var linear = Math.cubic_to_linear(cubic.x, cubic.y, cubic.z)
+		# chunks[0].hexes[linear].set_color(Color.GRAY)
 		print(cubic, " ", linear)
 
 func _ready() -> void:

@@ -1,6 +1,6 @@
 class_name Utils
 
-const HEX_RADIUS = .25
+const HEX_RADIUS = .5
 const CHUNK_RADIUS = 5
 
 static var hex_mesh: Mesh
@@ -28,18 +28,18 @@ static func generate_hex_mesh() -> Mesh:
 		0, 6, 1
 	])
 	
-	var uvs = PackedVector2Array([
-		Vector2(.5, .5),
-		Vector2(.5, 0),
-		Vector2(.5 + sqrt(3.0)*.5/2.0, 1.0 / 4.0),
-		Vector2(.5 + sqrt(3.0)*.5/2.0, 1.0 - 1.0/4.0),
-		Vector2(.5, 1.0),
-		Vector2(.5 - sqrt(3.0)*.5/2.0, 1.0 - 1.0/4.0),
-		Vector2(.5 - sqrt(3.0)*.5/2.0, 1.0 / 4.0),
-	])
+	#var uvs = PackedVector2Array([
+	#	Vector2(.5, .5),
+	#	Vector2(.5, 0),
+	#	Vector2(.5 + sqrt(3.0)*.5/2.0, 1.0 / 4.0),
+	#	Vector2(.5 + sqrt(3.0)*.5/2.0, 1.0 - 1.0/4.0),
+	#	Vector2(.5, 1.0),
+	#	Vector2(.5 - sqrt(3.0)*.5/2.0, 1.0 - 1.0/4.0),
+	#	Vector2(.5 - sqrt(3.0)*.5/2.0, 1.0 / 4.0),
+	#])
 	
 	arrays[Mesh.ARRAY_VERTEX] = vertices
-	arrays[Mesh.ARRAY_TEX_UV] = uvs
+	# arrays[Mesh.ARRAY_TEX_UV] = uvs
 	arrays[Mesh.ARRAY_INDEX] = indices
 	
 	var result = ArrayMesh.new()
