@@ -9,7 +9,7 @@ func generate_world(radius: int):
 	chunks.resize(world_size)
 	print("World size: ", world_size * Math.get_number_of_hexes(Utils.CHUNK_RADIUS))
 	
-	var first_chunk = Chunk.new(0, 0, 0, 0)
+	var first_chunk = Chunk.new(0, CubicCoords.new(0, 0, 0))
 	chunks[0] = first_chunk
 	add_child(first_chunk)
 	
@@ -20,17 +20,11 @@ func generate_world(radius: int):
 			var ltc = Math.linear_to_cubic(j)
 			for d in 6:
 				# Chunk coordinates ( / radius)
-				var nc = Math.get_neighbour_coords(ltc.x, ltc.y, ltc.z, 1, d)
-				var neighbour_number = Math.cubic_to_linear(nc.x, nc.y, nc.z)
+				var nc = ltc.get_neighbour_coords(1, d)
+				var neighbour_number = nc.to_linear()
 				if chunks[neighbour_number] == null:
-					var pos = Math.get_neighbour_coords(
-						chunks[j].center_q,
-						chunks[j].center_r,
-						chunks[j].center_s,
-						Utils.CHUNK_RADIUS,
-						d
-					)
-					var new_chunk = Chunk.new(neighbour_number, pos.x, pos.y, pos.z)
+					var pos = chunks[j].center.get_neighbour_coords(Utils.CHUNK_RADIUS, d)
+					var new_chunk = Chunk.new(neighbour_number, pos)
 					chunks[neighbour_number] = new_chunk
 					add_child(new_chunk)
 
@@ -64,9 +58,9 @@ func _input(event):
 			$MainCamera.project_ray_normal(mouse_pos)
 		)
 		var cubic = Math.cartesian_to_cubic(position3D.x, position3D.z)
-		var linear = Math.cubic_to_linear(cubic.x, cubic.y, cubic.z)
-		# chunks[0].hexes[linear].set_color(Color.GRAY)
-		print(cubic, " ", linear)
+		var linear = cubic.to_linear()
+		print(cubic.q, "/", cubic.r, "/", cubic.s, " ", linear)
+		chunks[0].hexes[linear].set_color(Color.GRAY)
 
 func _ready() -> void:
 	Utils.generate_meshes()

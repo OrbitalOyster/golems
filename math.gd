@@ -1,18 +1,21 @@
 class_name Math
 
 static func get_number_of_hexes(radius: int) -> int:
+	# Edge case
 	if radius == 0:
 		return 0
-	return 3*radius*radius-3*radius+1
+	else:
+		return 3*radius*radius-3*radius+1
 
 static func linear_to_radius(linear: int) -> int:
-	if linear == 0:
-		return 0
+	# Edge case
+	# if linear == 0:
+	#	return 0
 	return floor((3+sqrt(12*(linear-1)+9))/6)
 
-static func linear_to_cubic(linear: int) -> Vector3i:
+static func linear_to_cubic(linear: int) -> CubicCoords:
 	if linear == 0:
-		return Vector3i(0, 0, 0)
+		return CubicCoords.new(0, 0, 0)
 
 	var radius = linear_to_radius(linear)
 	var d = linear - get_number_of_hexes(radius)
@@ -47,14 +50,9 @@ static func linear_to_cubic(linear: int) -> Vector3i:
 			q = d % radius
 			s = -q - r
 
-	return Vector3i(q, r, s)
+	return CubicCoords.new(q, r, s)
 
-static func cubic_to_cartesian(q: int, r: int, _s: int) -> Vector3:
-	var x = (q + r / 2.0) * Utils.HEX_RADIUS * sqrt(3)
-	var z = r * Utils.HEX_RADIUS * 3 / 2
-	return Vector3(x, 0, z)
-
-static func cartesian_to_cubic(x: float, y: float) -> Vector3i:
+static func cartesian_to_cubic(x: float, y: float) -> CubicCoords:
 	x = x / Utils.HEX_RADIUS
 	y = y / Utils.HEX_RADIUS
 
@@ -77,69 +75,4 @@ static func cartesian_to_cubic(x: float, y: float) -> Vector3i:
 	else:
 		s_rounded = 0.0 - q_rounded - r_rounded
 
-	return Vector3i(q_rounded, r_rounded, s_rounded)
-
-static func get_radius(q: int, r: int, s: int) -> int:
-	if q+r+s != 0:
-		printerr("Wrong coords")
-	var q_a = abs(q)
-	var r_a = abs(r)
-	var s_a = abs(s)
-	return (q_a + r_a + s_a) / 2
-
-static func cubic_to_linear(q: int, r: int, s: int) -> int:
-	if q+r+s != 0:
-		printerr("Wrong coords")
-
-	if q == 0 && r == 0 && s == 0:
-		return 0
-
-	var radius = get_radius(q, r, s)
-	var minus_radius = -radius
-	var hexes = get_number_of_hexes(radius)
-	match q:
-		radius: # Top-right
-			return hexes - s
-		minus_radius: # Bottom-left
-			return hexes + radius*3 + s
-		_:
-			match r:
-				radius: # Bottom
-					return hexes + radius*2 - q
-				minus_radius: # Top
-					return hexes + radius*5 + q
-				_:
-					match s:
-						radius: # Top-left
-							return hexes + radius*4 - r
-						minus_radius: # Bottom-right
-							return hexes + radius + r
-	# Should not get here
-	printerr("On no!")
-	return 0
-
-static func get_neighbour_coords(q: int, r: int, s: int, radius: int, d: int) -> Vector3i:
-	match d:
-		0:
-			return Vector3i(q+radius*2-1, r-radius, s-(radius-1))
-		1:
-			return Vector3i(q+radius, r+radius-1, s-(radius*2-1))
-		2:
-			return Vector3i(q-(radius-1), r+radius*2-1, s-radius)
-		3:
-			return Vector3i(q-(radius*2-1), r+radius, s+radius-1)
-		4:
-			return Vector3i(q-radius, r-(radius-1), s+radius*2-1)
-		5:
-			return Vector3i(q+radius-1, r-(radius*2-1), s+radius)
-	
-	# Should not get here
-	printerr("Oh no!")
-	return Vector3i(0, 0, 0)
-
-static func is_rim_hex(q: int, r: int, s: int) -> bool:
-	return (
-		abs(q) == Utils.CHUNK_RADIUS - 1 || 
-		abs(r) == Utils.CHUNK_RADIUS - 1 ||
-		abs(s) == Utils.CHUNK_RADIUS - 1
-	)
+	return CubicCoords.new(q_rounded, r_rounded, s_rounded)

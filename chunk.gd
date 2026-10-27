@@ -5,9 +5,7 @@ var hexes_node: Node3D
 var hexes: Array
 
 var n: int
-var center_q: int
-var center_r: int
-var center_s: int
+var center: CubicCoords
 
 var notifier: Notifier
 
@@ -26,9 +24,9 @@ func generate_hexes():
 	hexes.resize(size)
 	for i in size:
 		var cubic = Math.linear_to_cubic(i)
-		var cartesian = Math.cubic_to_cartesian(cubic.x, cubic.y, cubic.z)
+		var cartesian = cubic.to_cartesizan()
 		var color: Color
-		if Math.is_rim_hex(cubic.x, cubic.y, cubic.z):
+		if cubic.is_rim():
 			color = Color.from_hsv(randf(), .9, .2)
 		else:
 			color = Color.from_hsv(randf(), .9, .9)
@@ -41,16 +39,11 @@ func free_hexes():
 	for hex in hexes_node.get_children():
 		hex.queue_free()
 
-func _init(new_n: int, q: int, r: int, s: int):
-	if q+r+s != 0:
-		printerr("Wrong coords")
-	
+func _init(new_n: int, new_center: CubicCoords):
 	n = new_n
-	center_q = q
-	center_r = r
-	center_s = s
+	center = new_center
 	
-	var pos = Math.cubic_to_cartesian(center_q, center_r, center_s)
+	var pos = center.to_cartesizan()
 	position.x = pos.x
 	position.z = pos.z
 
