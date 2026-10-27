@@ -5,7 +5,8 @@ var hexes_node: Node3D
 var hexes: Array
 
 var n: int
-var center: CubicCoords
+var center_coords: CubicCoords
+var chunk_coords: CubicCoords
 
 var notifier: Notifier
 
@@ -39,11 +40,13 @@ func free_hexes():
 	for hex in hexes_node.get_children():
 		hex.queue_free()
 
-func _init(new_n: int, new_center: CubicCoords):
+func _init(new_n: int, new_center_coords: CubicCoords):
 	n = new_n
-	center = new_center
+	chunk_coords = Math.linear_to_cubic(n)
 	
-	var pos = center.to_cartesizan()
+	center_coords = new_center_coords
+	
+	var pos = center_coords.to_cartesizan()
 	position.x = pos.x
 	position.z = pos.z
 
@@ -61,8 +64,13 @@ func _init(new_n: int, new_center: CubicCoords):
 	hexes_node = Node3D.new()
 	add_child(hexes_node)
 
+func get_neighbour_coords(d: int) -> CubicCoords:
+	return chunk_coords.get_neighbour_coords(1, d)
+
 func on_exit():
 	print("Chunk exited: #", n)
+	var c = Math.linear_to_cubic(n)
+	print(c.q, " ", c.r, " ", c.s)
 	free_hexes()
 
 func on_enter():

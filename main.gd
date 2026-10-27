@@ -17,13 +17,12 @@ func generate_world(radius: int):
 		var chunks_done = Math.get_number_of_hexes(i - 1)
 		var chunks_to_generate = Math.get_number_of_hexes(i)
 		for j in range(chunks_done, chunks_to_generate):
-			var ltc = Math.linear_to_cubic(j)
+			var chunk_coords = Math.linear_to_cubic(j)
 			for d in 6:
 				# Chunk coordinates ( / radius)
-				var nc = ltc.get_neighbour_coords(1, d)
-				var neighbour_number = nc.to_linear()
+				var neighbour_number = chunk_coords.get_neighbour_coords(1, d).to_linear()
 				if chunks[neighbour_number] == null:
-					var pos = chunks[j].center.get_neighbour_coords(Utils.CHUNK_RADIUS, d)
+					var pos = chunks[j].center_coords.get_neighbour_coords(Utils.CHUNK_RADIUS, d)
 					var new_chunk = Chunk.new(neighbour_number, pos)
 					chunks[neighbour_number] = new_chunk
 					add_child(new_chunk)
@@ -58,9 +57,26 @@ func _input(event):
 			$MainCamera.project_ray_normal(mouse_pos)
 		)
 		var cubic = Math.cartesian_to_cubic(position3D.x, position3D.z)
-		var linear = cubic.to_linear()
-		print(cubic.q, "/", cubic.r, "/", cubic.s, " ", linear)
-		chunks[0].hexes[linear].set_color(Color.GRAY)
+		chunks[0].hexes[cubic.to_linear()].set_color(Color.DARK_GRAY)
+		print(cubic.q, "/", cubic.r, "/", cubic.s, " ", cubic.to_linear())
+		if cubic.is_rim():
+			if cubic.q == Utils.CHUNK_RADIUS - 1:
+				var neighbour_n = chunks[0].get_neighbour_coords(0).to_linear()
+				var neighbour_hex_coords = CubicCoords.new(-cubic.q, -cubic.s, -cubic.r)
+				chunks[neighbour_n].hexes[neighbour_hex_coords.to_linear()].set_color(Color.GRAY)
+			if cubic.s == -(Utils.CHUNK_RADIUS - 1):
+				var neighbour_n = chunks[0].get_neighbour_coords(1).to_linear()
+				var neighbour_hex_coords = CubicCoords.new(-cubic.r, -cubic.q, -cubic.s)
+				chunks[neighbour_n].hexes[neighbour_hex_coords.to_linear()].set_color(Color.GRAY)
+			if cubic.r == Utils.CHUNK_RADIUS - 1:
+				var neighbour_n = chunks[0].get_neighbour_coords(2).to_linear()
+				var neighbour_hex_coords = CubicCoords.new(-cubic.s, -cubic.r, -cubic.q)
+				chunks[neighbour_n].hexes[neighbour_hex_coords.to_linear()].set_color(Color.GRAY)
+		else:
+			for d in 6:
+				var neighbour = cubic.get_neighbour_coords(1, d)
+				var linear = neighbour.to_linear()
+				chunks[0].hexes[linear].set_color(Color.GRAY)
 
 func _ready() -> void:
 	Utils.generate_meshes()
