@@ -1,8 +1,10 @@
 class_name Chunk
 extends Node3D
 
+signal hex_clicked_on(n: int)
+
 var hexes_node: Node3D
-var hexes: Array
+var hexes: Array[Hex]
 
 var center_coords: CubicCoords
 var chunk_coords: CubicCoords
@@ -31,6 +33,7 @@ func generate_hexes():
 		else:
 			color = Color.from_hsv(randf(), .9, .9)
 		var new_hex = generate_hex(cartesian.x, cartesian.z, 1, false, color)
+		new_hex.clicked_on.connect(func(): hex_clicked_on.emit(i))
 		hexes[i] = new_hex
 		hexes_node.add_child(new_hex)
 	hexes[0].set_color(Color.BLACK)

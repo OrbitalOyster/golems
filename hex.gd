@@ -1,6 +1,8 @@
 class_name Hex
 extends Node3D
 
+signal clicked_on
+
 var color: Color
 var instance: MeshInstance3D
 
@@ -21,7 +23,8 @@ func set_color(new_color: Color):
 
 func on_clicked(_camera: Node, event: InputEvent, _event_position: Vector3, _normal: Vector3, _shape_idx: int):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		print("Color ", color)
+		# print("Color ", color)
+		clicked_on.emit()
 
 func generate_instance():
 	instance = MeshInstance3D.new()
