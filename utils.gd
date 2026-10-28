@@ -44,6 +44,7 @@ static func generate_hex_mesh() -> Mesh:
 	
 	var result = ArrayMesh.new()
 	result.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+
 	return result
 
 static func generate_meshes():

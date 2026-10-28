@@ -68,6 +68,16 @@ func get_neighbour_coords(radius: int, d: int) -> CubicCoords:
 	printerr("Oh no!")
 	return CubicCoords.new(0, 0, 0)
 
+func get_all_neighbour_coords() -> Array[CubicCoords]:
+	return [
+		CubicCoords.new(q+1, r-1, s),
+		CubicCoords.new(q+1, r, s-1),
+		CubicCoords.new(q, r+1, s-1),
+		CubicCoords.new(q-1, r+1, s),
+		CubicCoords.new(q-1, r, s+1),
+		CubicCoords.new(q, r-1, s+1)
+	]
+
 func is_rim() -> bool:
 	return (
 		abs(q) == Utils.CHUNK_RADIUS - 1 || 
