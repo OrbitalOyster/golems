@@ -11,8 +11,8 @@ var chunk_coords: CubicCoords
 
 var notifier: Notifier
 
-func generate_hex(x: float, z: float, size: float, flat_top: bool, color: Color) -> Hex:
-	var new_hex := Hex.new(color)
+func generate_hex(x: float, z: float, size: float, flat_top: bool, color: Color, height: float) -> Hex:
+	var new_hex := Hex.new(color, height)
 	new_hex.position.x = x
 	new_hex.position.z = z
 	new_hex.scale.x = size
@@ -32,7 +32,10 @@ func generate_hexes():
 			color = Color.from_hsv(randf(), .9, .2)
 		else:
 			color = Color.from_hsv(randf(), .9, .9)
-		var new_hex = generate_hex(cartesian.x, cartesian.z, 1, false, color)
+		var height = 0.0
+		if randi_range(1, 10) == 10:
+			height = 0.25
+		var new_hex = generate_hex(cartesian.x, cartesian.z, 1, false, color, height)
 		new_hex.clicked_on.connect(func(): hex_clicked_on.emit(i))
 		hexes[i] = new_hex
 		hexes_node.add_child(new_hex)

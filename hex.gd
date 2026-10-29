@@ -3,15 +3,17 @@ extends Node3D
 
 signal clicked_on
 
-var color: Color
+var color: Color = Color.GRAY
+var height: float = 0.0
+
 var instance: MeshInstance3D
 var area3d: Area3D
 
-var notifier_size = Vector3(
-	Utils.HEX_RADIUS * sqrt(3.0),
-	.25,
-	Utils.HEX_RADIUS * 2
-)
+#var notifier_size = Vector3(
+	#Utils.HEX_RADIUS * sqrt(3.0),
+	#.25,
+	#Utils.HEX_RADIUS * 2
+#)
 
 func apply_color():
 	var material = StandardMaterial3D.new()
@@ -39,10 +41,13 @@ func generate_instance():
 	area3d.add_child(collisionChape)
 	area3d.input_event.connect(on_clicked)
 	add_child(area3d)
+	# Height
+	position.y = height
 
 func free_instance():
 	instance.queue_free()
 	area3d.queue_free()
 
-func _init(new_color: Color):
+func _init(new_color: Color, new_height: float):
 	color = new_color
+	height = new_height
