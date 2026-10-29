@@ -36,7 +36,6 @@ func generate_hexes():
 		new_hex.clicked_on.connect(func(): hex_clicked_on.emit(i))
 		hexes[i] = new_hex
 		hexes_node.add_child(new_hex)
-	hexes[0].set_color(Color.BLACK)
 
 func generate_hex_instances():
 	for hex in hexes:

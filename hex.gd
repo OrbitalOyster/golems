@@ -46,4 +46,3 @@ func free_instance():
 
 func _init(new_color: Color):
 	color = new_color
-	generate_instance()
