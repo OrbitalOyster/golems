@@ -25,16 +25,6 @@ func _input(event):
 		var previous_mouse_pos = mouse_pos - event.relative
 		var previous_position_3d = mouse_screen_pos_to_ground_plane(previous_mouse_pos)
 		$MainCamera.position += (previous_position_3d - position_3d)
-	
-	if event is InputEventMouseButton and event.is_pressed() and event.button_index == 1:
-		var mouse_pos = get_viewport().get_mouse_position()
-		var position3D = ground_plane.intersects_ray(
-			$MainCamera.project_ray_origin(mouse_pos),
-			$MainCamera.project_ray_normal(mouse_pos)
-		)
-		
-		#var cubic = Math.cartesian_to_cubic(position3D.x, position3D.z)
-		#world.paint_hex(0, cubic)
 
 func _ready() -> void:
 	Utils.generate_meshes()

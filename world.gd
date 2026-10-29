@@ -1,7 +1,15 @@
-extends Node
 class_name World
+extends Node3D
 
 var chunks: Array
+
+func get_chunk_neighbour(chunk: Chunk, d: int) -> Chunk:
+	var coords = chunk.get_neighbour_coords(d)
+	var linear = coords.to_linear()
+	if linear >= chunks.size():
+		return null
+	else:
+		return chunks[linear]
 
 func get_hex_neighbours(chunk_n: int, hex_coords: CubicCoords) -> Array[Hex]:
 	var chunk = chunks[chunk_n]
@@ -10,49 +18,53 @@ func get_hex_neighbours(chunk_n: int, hex_coords: CubicCoords) -> Array[Hex]:
 	var s = hex_coords.s
 	var result: Array[Hex]
 	result.resize(6)
-	result.fill(null)
-	
 	if hex_coords.is_rim():
 		# Top-right && right
 		if q == Utils.CHUNK_RADIUS - 1:
-			var neighbour_n = chunks[chunk_n].get_neighbour_coords(0).to_linear()
-			result[0] = chunks[neighbour_n].get_hex(CubicCoords.new(-q, -s, -r))
-			result[1] = chunks[neighbour_n].get_hex(CubicCoords.new(-q, -s+1, -r-1))
+			var neighbour = get_chunk_neighbour(chunk, 0)
+			if neighbour != null:
+				result[0] = neighbour.get_hex(CubicCoords.new(-q, -s, -r))
+				result[1] = neighbour.get_hex(CubicCoords.new(-q, -s+1, -r-1))
 		# Right && bottom-right
 		if s == -(Utils.CHUNK_RADIUS - 1):
-			var neighbour_n = chunks[chunk_n].get_neighbour_coords(1).to_linear()
-			result[1] = chunks[neighbour_n].get_hex(CubicCoords.new(-r, -q, -s))
-			result[2] = chunks[neighbour_n].get_hex(CubicCoords.new(-r-1, -q+1, -s))
+			var neighbour = get_chunk_neighbour(chunk, 1)
+			if neighbour != null:
+				result[1] = neighbour.get_hex(CubicCoords.new(-r, -q, -s))
+				result[2] = neighbour.get_hex(CubicCoords.new(-r-1, -q+1, -s))
 		# Bottom-right && bottom-left
 		if r == Utils.CHUNK_RADIUS - 1:
-			var neighbour_n = chunks[chunk_n].get_neighbour_coords(2).to_linear()
-			result[2] = chunks[neighbour_n].get_hex(CubicCoords.new(-s, -r, -q))
-			result[3] = chunks[neighbour_n].get_hex(CubicCoords.new(-s-1, -r, -q+1))
+			var neighbour = get_chunk_neighbour(chunk, 2)
+			if neighbour != null:
+				result[2] = neighbour.get_hex(CubicCoords.new(-s, -r, -q))
+				result[3] = neighbour.get_hex(CubicCoords.new(-s-1, -r, -q+1))
 		# Bottom-left && right
 		if q == -(Utils.CHUNK_RADIUS - 1):
-			var neighbour_n = chunks[chunk_n].get_neighbour_coords(3).to_linear()
-			result[3] = chunks[neighbour_n].get_hex(CubicCoords.new(-q, -s, -r))
-			result[4] = chunks[neighbour_n].get_hex(CubicCoords.new(-q, -s-1, -r+1))
+			var neighbour = get_chunk_neighbour(chunk, 3)
+			if neighbour != null:
+				result[3] = neighbour.get_hex(CubicCoords.new(-q, -s, -r))
+				result[4] = neighbour.get_hex(CubicCoords.new(-q, -s-1, -r+1))
 		# Right && top-right
 		if s == Utils.CHUNK_RADIUS - 1:
-			var neighbour_n = chunks[chunk_n].get_neighbour_coords(4).to_linear()
-			result[4] = chunks[neighbour_n].get_hex(CubicCoords.new(-r, -q, -s))
-			result[5] = chunks[neighbour_n].get_hex(CubicCoords.new(-r+1, -q-1, -s))
+			var neighbour = get_chunk_neighbour(chunk, 4)
+			if neighbour != null:
+				result[4] = neighbour.get_hex(CubicCoords.new(-r, -q, -s))
+				result[5] = neighbour.get_hex(CubicCoords.new(-r+1, -q-1, -s))
 		# Top-right && top
 		if r == -(Utils.CHUNK_RADIUS - 1):
-			var neighbour_n = chunks[chunk_n].get_neighbour_coords(5).to_linear()
-			result[5] = chunks[neighbour_n].get_hex(CubicCoords.new(-s, -r, -q))
-			result[0] = chunks[neighbour_n].get_hex(CubicCoords.new(-s+1, -r, -q-1))
+			var neighbour = get_chunk_neighbour(chunk, 5)
+			if neighbour != null:
+				result[5] = neighbour.get_hex(CubicCoords.new(-s, -r, -q))
+				result[0] = neighbour.get_hex(CubicCoords.new(-s+1, -r, -q-1))
 		# Top && top-right (single hex)
 		if r == -(Utils.CHUNK_RADIUS - 1) && q == Utils.CHUNK_RADIUS - 1:
-			var neighbour_n = chunks[chunk_n].get_neighbour_coords(0).to_linear()
-			result[0] = chunks[neighbour_n].get_hex(CubicCoords.new(-q, -s, -r))
+			var neighbour = get_chunk_neighbour(chunk, 0)
+			if neighbour != null:
+				result[0] = neighbour.get_hex(CubicCoords.new(-q, -s, -r))
 
 	var neighbour_coords = hex_coords.get_all_neighbour_coords()
 	for i in 6:
 		if result[i] == null:
 			result[i] = chunk.hexes[neighbour_coords[i].to_linear()]
-	
 	return result
 
 func paint_hex(chunk_n: int, coords: CubicCoords):

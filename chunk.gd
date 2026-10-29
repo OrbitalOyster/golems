@@ -38,9 +38,13 @@ func generate_hexes():
 		hexes_node.add_child(new_hex)
 	hexes[0].set_color(Color.BLACK)
 
-func free_hexes():
-	for hex in hexes_node.get_children():
-		hex.queue_free()
+func generate_hex_instances():
+	for hex in hexes:
+		hex.generate_instance()
+
+func free_hex_instances():
+	for hex in hexes:
+		hex.free_instance()
 
 func _init(n: int, new_center_coords: CubicCoords):
 	chunk_coords = Math.linear_to_cubic(n)
@@ -63,6 +67,8 @@ func _init(n: int, new_center_coords: CubicCoords):
 
 	hexes_node = Node3D.new()
 	add_child(hexes_node)
+	
+	generate_hexes()
 
 func get_hex(coords: CubicCoords) -> Hex:
 	var linear = coords.to_linear()
@@ -76,8 +82,8 @@ func get_neighbour_coords(d: int) -> CubicCoords:
 
 func on_exit():
 	# print("Chunk exited: #", n)
-	free_hexes()
+	free_hex_instances()
 
 func on_enter():
 	# print("Chunk entered: #", n)
-	generate_hexes()
+	generate_hex_instances()
