@@ -64,6 +64,13 @@ func _init(n: int, new_center_coords: CubicCoords):
 	hexes_node = Node3D.new()
 	add_child(hexes_node)
 
+func get_hex(coords: CubicCoords) -> Hex:
+	var linear = coords.to_linear()
+	if linear >= Math.get_number_of_hexes(Utils.CHUNK_RADIUS):
+		return null
+	else:
+		return hexes[linear]
+
 func get_neighbour_coords(d: int) -> CubicCoords:
 	return chunk_coords.get_neighbour_coords(1, d)
 

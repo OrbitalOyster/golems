@@ -5,44 +5,65 @@ var chunks: Array
 
 func get_hex_neighbours(chunk_n: int, hex_coords: CubicCoords) -> Array[Hex]:
 	var chunk = chunks[chunk_n]
+	var q = hex_coords.q
+	var r = hex_coords.r
+	var s = hex_coords.s
 	var result: Array[Hex]
 	result.resize(6)
+	result.fill(null)
+	
+	if hex_coords.is_rim():
+		# Top-right && right
+		if q == Utils.CHUNK_RADIUS - 1:
+			var neighbour_n = chunks[chunk_n].get_neighbour_coords(0).to_linear()
+			result[0] = chunks[neighbour_n].get_hex(CubicCoords.new(-q, -s, -r))
+			result[1] = chunks[neighbour_n].get_hex(CubicCoords.new(-q, -s+1, -r-1))
+		# Right && bottom-right
+		if s == -(Utils.CHUNK_RADIUS - 1):
+			var neighbour_n = chunks[chunk_n].get_neighbour_coords(1).to_linear()
+			result[1] = chunks[neighbour_n].get_hex(CubicCoords.new(-r, -q, -s))
+			result[2] = chunks[neighbour_n].get_hex(CubicCoords.new(-r-1, -q+1, -s))
+		# Bottom-right && bottom-left
+		if r == Utils.CHUNK_RADIUS - 1:
+			var neighbour_n = chunks[chunk_n].get_neighbour_coords(2).to_linear()
+			result[2] = chunks[neighbour_n].get_hex(CubicCoords.new(-s, -r, -q))
+			result[3] = chunks[neighbour_n].get_hex(CubicCoords.new(-s-1, -r, -q+1))
+		# Bottom-left && right
+		if q == -(Utils.CHUNK_RADIUS - 1):
+			var neighbour_n = chunks[chunk_n].get_neighbour_coords(3).to_linear()
+			result[3] = chunks[neighbour_n].get_hex(CubicCoords.new(-q, -s, -r))
+			result[4] = chunks[neighbour_n].get_hex(CubicCoords.new(-q, -s-1, -r+1))
+		# Right && top-right
+		if s == Utils.CHUNK_RADIUS - 1:
+			var neighbour_n = chunks[chunk_n].get_neighbour_coords(4).to_linear()
+			result[4] = chunks[neighbour_n].get_hex(CubicCoords.new(-r, -q, -s))
+			result[5] = chunks[neighbour_n].get_hex(CubicCoords.new(-r+1, -q-1, -s))
+		# Top-right && top
+		if r == -(Utils.CHUNK_RADIUS - 1):
+			var neighbour_n = chunks[chunk_n].get_neighbour_coords(5).to_linear()
+			result[5] = chunks[neighbour_n].get_hex(CubicCoords.new(-s, -r, -q))
+			result[0] = chunks[neighbour_n].get_hex(CubicCoords.new(-s+1, -r, -q-1))
+		# Top && top-right (single hex)
+		if r == -(Utils.CHUNK_RADIUS - 1) && q == Utils.CHUNK_RADIUS - 1:
+			var neighbour_n = chunks[chunk_n].get_neighbour_coords(0).to_linear()
+			result[0] = chunks[neighbour_n].get_hex(CubicCoords.new(-q, -s, -r))
+
 	var neighbour_coords = hex_coords.get_all_neighbour_coords()
 	for i in 6:
-		result[i] = chunk.hexes[neighbour_coords[i].to_linear()]
+		if result[i] == null:
+			result[i] = chunk.hexes[neighbour_coords[i].to_linear()]
+	
 	return result
 
 func paint_hex(chunk_n: int, coords: CubicCoords):
-	chunks[chunk_n].hexes[coords.to_linear()].set_color(Color.DARK_GRAY)
-	print(coords.q, "/", coords.r, "/", coords.s, " ", coords.to_linear())
-	var neighbour_coords = coords.get_all_neighbour_coords()
-	if coords.is_rim():
-		# Top-right
-		if coords.q == Utils.CHUNK_RADIUS - 1:
-			var neighbour_n = chunks[chunk_n].get_neighbour_coords(0).to_linear()
-			var neighbour_hex_coords = CubicCoords.new(-coords.q, -coords.s, -coords.r)
-			chunks[neighbour_n].hexes[neighbour_hex_coords.to_linear()].set_color(Color.GRAY)
-		else: if coords.r == -(Utils.CHUNK_RADIUS - 1):
-			var neighbour_n = chunks[chunk_n].get_neighbour_coords(5).to_linear()
-			var neighbour_hex_coords = CubicCoords.new(-coords.s + 1, -coords.r, -coords.q - 1)
-			chunks[neighbour_n].hexes[neighbour_hex_coords.to_linear()].set_color(Color.GRAY)
-		else:
-			chunks[chunk_n].hexes[neighbour_coords[0].to_linear()].set_color(Color.GRAY)
-			#if cubic.s == -(Utils.CHUNK_RADIUS - 1):
-			#var neighbour_n = chunks[chunk_n].get_neighbour_coords(1).to_linear()
-			#var neighbour_hex_coords = CubicCoords.new(-cubic.r, -cubic.q, -cubic.s)
-			#chunks[neighbour_n].hexes[neighbour_hex_coords.to_linear()].set_color(Color.GRAY)
-		#if cubic.r == Utils.CHUNK_RADIUS - 1:
-			#var neighbour_n = chunks[chunk_n].get_neighbour_coords(2).to_linear()
-			#var neighbour_hex_coords = CubicCoords.new(-cubic.s, -cubic.r, -cubic.q)
-			#chunks[neighbour_n].hexes[neighbour_hex_coords.to_linear()].set_color(Color.GRAY)
-	else:
-		for hex in get_hex_neighbours(chunk_n, coords):
-			hex.set_color(Color.GRAY)
+	var neighbours = get_hex_neighbours(chunk_n, coords)
+	for hex in neighbours:
+		if hex != null:
+			hex.set_color(Color.DIM_GRAY)
 
 func on_hex_clicked(chunk_n: int, hex_n: int):
-	print("Hex clicked ", chunk_n, " ", hex_n)
 	var cubic_coords = Math.linear_to_cubic(hex_n)
+	print("Hex clicked ", chunk_n, "[", hex_n, "] ", cubic_coords.q, "/",cubic_coords.r, "/", cubic_coords.s)
 	paint_hex(chunk_n, cubic_coords)
 
 func _init(radius: int):
