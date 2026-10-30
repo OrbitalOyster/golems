@@ -2,16 +2,8 @@
 
 [ext_resource type="Script" uid="uid://dqj24t0vy7y47" path="res://main.gd" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://cbd8cbqkpscoh" path="res://main_camera.gd" id="2_0xm2m"]
-[ext_resource type="Texture2D" uid="uid://don7y2lk548li" path="res://dirt.jpg" id="3_h2yge"]
 
 [sub_resource type="Environment" id="Environment_javbf"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1bvp3"]
-albedo_texture = ExtResource("3_h2yge")
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_0xm2m"]
-lightmap_size_hint = Vector2i(17, 19)
-radial_segments = 6
 
 [node name="Main" type="Node3D" unique_id=146398355]
 script = ExtResource("1_ig7tw")
@@ -32,14 +24,8 @@ theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 32
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1566712290]
-transform = Transform3D(0.25556156, -0.6836257, 0.6836257, 0, 0.7071068, 0.70710677, -0.9667928, -0.18070927, 0.18070927, 6.560437, 7.098173, 4.2006073)
-light_energy = 3.0
+transform = Transform3D(0.9291582, -0.10062772, 0.35572332, -0.14291283, 0.78965735, 0.59667164, -0.3409412, -0.6052398, 0.7193357, 6.560437, 7.098173, 4.2006073)
 shadow_enabled = true
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1658336914]
-transform = Transform3D(0.9999946, -0.0032931108, 0, 0.0032931108, 0.9999946, 0, 0, 0, 1, 0, -0.24092579, 0)
-material_override = SubResource("StandardMaterial3D_1bvp3")
-mesh = SubResource("CylinderMesh_0xm2m")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1391135080]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.568641, 1.461451, 2.2383866)
