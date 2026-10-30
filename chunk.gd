@@ -34,7 +34,9 @@ func generate_hexes():
 			color = Color.from_hsv(randf(), .9, .9)
 		var height = 0.0
 		if randi_range(1, 10) == 10:
-			height = 0.25
+			height = Utils.HEX_RADIUS / 4.0 * 2.0
+		if randi_range(1, 10) < 3:
+			height = Utils.HEX_RADIUS / 4.0
 		var new_hex = generate_hex(cartesian.x, cartesian.z, 1, false, color, height)
 		new_hex.clicked_on.connect(func(): hex_clicked_on.emit(i))
 		hexes[i] = new_hex
