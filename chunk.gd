@@ -33,10 +33,10 @@ func generate_hexes():
 		else:
 			color = Color.from_hsv(randf(), .9, .9)
 		var height = 0.0
-		if randi_range(1, 10) == 10:
-			height = Utils.HEX_RADIUS / 4.0 * 2.0
-		if randi_range(1, 10) < 3:
-			height = Utils.HEX_RADIUS / 4.0
+		# if randi_range(1, 10) == 10:
+		#	height = Utils.HEX_RADIUS / 4.0 * 2.0
+		#if randi_range(1, 10) < 3:
+		#	height = Utils.HEX_RADIUS / 4.0
 		var new_hex = generate_hex(cartesian.x, cartesian.z, 1, false, color, height)
 		new_hex.clicked_on.connect(func(): hex_clicked_on.emit(i))
 		hexes[i] = new_hex
@@ -53,11 +53,9 @@ func free_hex_instances():
 func _init(n: int, new_center_coords: CubicCoords):
 	chunk_coords = Math.linear_to_cubic(n)
 	center_coords = new_center_coords
-	
 	var pos = center_coords.to_cartesizan()
 	position.x = pos.x
 	position.z = pos.z
-
 	# TODO: Not exactly right (a little bigger than actual chunk)
 	var aabb_size = Vector3(
 		Utils.HEX_RADIUS * sqrt(3.0) * (Utils.CHUNK_RADIUS * 2 - 1),
@@ -68,10 +66,8 @@ func _init(n: int, new_center_coords: CubicCoords):
 	add_child(notifier)
 	notifier.screen_exited.connect(on_exit)
 	notifier.screen_entered.connect(on_enter)
-
 	hexes_node = Node3D.new()
 	add_child(hexes_node)
-	
 	generate_hexes()
 
 func get_hex(coords: CubicCoords) -> Hex:

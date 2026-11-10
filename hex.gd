@@ -30,6 +30,9 @@ func set_color(new_color: Color):
 	color = new_color
 	apply_color()
 
+func set_label(text: String):
+	label.text = text
+
 func on_clicked(_camera: Node, event: InputEvent, _event_position: Vector3, _normal: Vector3, _shape_idx: int):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		clicked_on.emit()
@@ -54,9 +57,9 @@ func generate_instance():
 	position.y = height
 	# Label
 	label = Label3D.new()
-	label.text = "0"
+	label.text = str(height)
 	label.position.y = .2
-	label.font_size = 64
+	label.font_size = 32
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	add_child(label)
 

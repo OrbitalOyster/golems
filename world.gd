@@ -78,6 +78,10 @@ func on_hex_clicked(chunk_n: int, hex_n: int):
 	print("Hex clicked ", chunk_n, "[", hex_n, "] ", cubic_coords.q, "/",cubic_coords.r, "/", cubic_coords.s)
 	paint_hex(chunk_n, cubic_coords)
 
+func process_water():
+	print("Water")
+	pass
+
 func _init(radius: int):
 	var size = Math.get_number_of_hexes(radius)
 	print("Chunks to generate: ", size)

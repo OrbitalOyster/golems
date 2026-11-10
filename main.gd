@@ -26,6 +26,9 @@ func _input(event):
 		var previous_position_3d = mouse_screen_pos_to_ground_plane(previous_mouse_pos)
 		$MainCamera.position += (previous_position_3d - position_3d)
 
+	if event is InputEventKey and Input.is_key_pressed(KEY_W):
+		world.process_water()
+
 func _ready() -> void:
 	Utils.generate_meshes()
 	world = World.new(2)
