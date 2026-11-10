@@ -5,10 +5,12 @@ signal clicked_on
 
 var color: Color = Color.GRAY
 var height: float = 0.0
+var water_level = 0.0
 
 var top: MeshInstance3D
 var walls: MeshInstance3D
 var area3d: Area3D
+var label: Label3D
 
 #var notifier_size = Vector3(
 	#Utils.HEX_RADIUS * sqrt(3.0),
@@ -50,6 +52,13 @@ func generate_instance():
 	add_child(area3d)
 	# Height
 	position.y = height
+	# Label
+	label = Label3D.new()
+	label.text = "0"
+	label.position.y = .2
+	label.font_size = 64
+	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	add_child(label)
 
 func free_instance():
 	top.queue_free()
