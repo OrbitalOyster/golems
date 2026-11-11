@@ -1,7 +1,7 @@
 class_name World
 extends Node3D
 
-var chunks: Array
+var chunks: Array[Chunk]
 
 func get_chunk_neighbour(chunk: Chunk, d: int) -> Chunk:
 	var coords = chunk.get_neighbour_coords(d)
@@ -64,7 +64,9 @@ func get_hex_neighbours(chunk_n: int, hex_coords: CubicCoords) -> Array[Hex]:
 	var neighbour_coords = hex_coords.get_all_neighbour_coords()
 	for i in 6:
 		if result[i] == null:
-			result[i] = chunk.hexes[neighbour_coords[i].to_linear()]
+			var hex_linear_coords = neighbour_coords[i].to_linear()
+			if hex_linear_coords < Math.get_number_of_hexes(Utils.CHUNK_RADIUS):
+				result[i] = chunk.hexes[hex_linear_coords]
 	return result
 
 func paint_hex(chunk_n: int, coords: CubicCoords):
@@ -80,7 +82,10 @@ func on_hex_clicked(chunk_n: int, hex_n: int):
 
 func process_water():
 	print("Water")
-	pass
+	for chunk in chunks:
+		for hex in chunk.hexes:
+			# var neighbours = get_hex_neighbours()
+			pass
 
 func _init(radius: int):
 	var size = Math.get_number_of_hexes(radius)
@@ -105,3 +110,5 @@ func _init(radius: int):
 					new_chunk.hex_clicked_on.connect(func(hex_n): on_hex_clicked(neighbour_number, hex_n))
 					chunks[neighbour_number] = new_chunk
 					add_child(new_chunk)
+
+	chunks[0].hexes[0].set_water_level(7.0)
