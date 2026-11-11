@@ -1,7 +1,7 @@
 class_name Chunk
 extends Node3D
 
-signal hex_clicked_on(n: int)
+signal hex_clicked_on(hex: Hex)
 
 var hexes_node: Node3D
 var hexes: Array[Hex]
@@ -11,8 +11,8 @@ var chunk_coords: CubicCoords
 
 var notifier: Notifier
 
-func generate_hex(x: float, z: float, size: float, flat_top: bool, color: Color, height: float) -> Hex:
-	var new_hex := Hex.new(color, height)
+func generate_hex(index: int, x: float, z: float, size: float, flat_top: bool, color: Color, height: float) -> Hex:
+	var new_hex := Hex.new(index, color, height)
 	new_hex.position.x = x
 	new_hex.position.z = z
 	new_hex.scale.x = size
@@ -37,8 +37,8 @@ func generate_hexes():
 		#	height = Utils.HEX_RADIUS / 4.0 * 2.0
 		#if randi_range(1, 10) < 3:
 		#	height = Utils.HEX_RADIUS / 4.0
-		var new_hex = generate_hex(cartesian.x, cartesian.z, 1, false, color, height)
-		new_hex.clicked_on.connect(func(): hex_clicked_on.emit(i))
+		var new_hex = generate_hex(i, cartesian.x, cartesian.z, 1, false, color, height)
+		new_hex.clicked_on.connect(func(): hex_clicked_on.emit(new_hex))
 		hexes[i] = new_hex
 		hexes_node.add_child(new_hex)
 

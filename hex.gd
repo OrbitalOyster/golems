@@ -3,6 +3,8 @@ extends Node3D
 
 signal clicked_on
 
+var index: int
+
 var color: Color = Color.GRAY
 var height: float = 0.0
 var text = ""
@@ -33,6 +35,7 @@ func set_color(new_color: Color):
 
 func set_label(new_text: String):
 	text = new_text
+	label.text = text
 
 func set_water_level(n: float):
 	water_level = n
@@ -73,6 +76,7 @@ func free_instance():
 	area3d.queue_free()
 	label.queue_free()
 
-func _init(new_color: Color, new_height: float):
+func _init(new_index: int, new_color: Color, new_height: float):
+	index = new_index
 	color = new_color
 	height = new_height
