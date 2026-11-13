@@ -9,6 +9,7 @@ var color: Color = Color.GRAY
 var height: float = 0.0
 var text = ""
 var water_level = 0.0
+var temperature = 0.0
 
 var top: MeshInstance3D
 var walls: MeshInstance3D
@@ -40,6 +41,9 @@ func set_label(new_text: String):
 func set_water_level(n: float):
 	water_level = n
 
+func set_temperature(n: float):
+	temperature = n
+
 func on_clicked(_camera: Node, event: InputEvent, _event_position: Vector3, _normal: Vector3, _shape_idx: int):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		clicked_on.emit()
@@ -64,7 +68,7 @@ func generate_instance():
 	position.y = height
 	# Label
 	label = Label3D.new()
-	label.text = str(water_level)
+	label.text = str(temperature)
 	label.position.y = .2
 	label.font_size = 32
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED

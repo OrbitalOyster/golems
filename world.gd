@@ -92,7 +92,19 @@ func process_water():
 	for h in unstable_hexes:
 		h.set_water_level(1)
 		h.set_label(str(h.water_level))
-		
+
+func process_temperature():
+	print("Temperature")
+	var unstable_hexes: Array[Hex]
+	for chunk in chunks:
+		for hex in chunk.hexes:
+			var neighbours: Array[Hex] = get_hex_neighbours(chunk, hex)
+			for neighbour: Hex in neighbours:
+				if neighbour != null && neighbour.temperature < hex.temperature:
+					unstable_hexes.append(neighbour)
+	for h in unstable_hexes:
+		h.set_temperature(1)
+		h.set_label(str(h.temperature))
 
 func _init(radius: int):
 	var size = Math.get_number_of_hexes(radius)
@@ -118,4 +130,4 @@ func _init(radius: int):
 					chunks[neighbour_number] = new_chunk
 					add_child(new_chunk)
 
-	chunks[0].hexes[0].set_water_level(7.0)
+	chunks[0].hexes[0].set_temperature(14.0)

@@ -29,6 +29,9 @@ func _input(event):
 	if event is InputEventKey and Input.is_key_pressed(KEY_W):
 		world.process_water()
 
+	if event is InputEventKey and Input.is_key_pressed(KEY_T):
+		world.process_temperature()
+
 func _ready() -> void:
 	Utils.generate_meshes()
 	world = World.new(2)
